@@ -12,7 +12,7 @@ metadata:
 data:
   location.groovy: |
     hudson.ExtensionList.lookupSingleton(com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor.class).disable(true)
-    jenkins.model.JenkinsLocationConfiguration.get().setUrl("http://cloudbees-core.example.com/cjoc");
+    jenkins.model.JenkinsLocationConfiguration.get().setUrl("http://demo.cb-sa.io/cjoc");
 ---
 # Source: cloudbees-core/templates/cjoc-jenkins-agent.yaml
 apiVersion: v1
