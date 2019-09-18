@@ -346,7 +346,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jenkins
-          image: cloudbees/cloudbees-cloud-core-oc:2.176.3.2
+          image: cloudbees/cloudbees-cloud-core-oc:2.176.3.3
           imagePullPolicy: "Always"
           env:
             - name: ENVIRONMENT
