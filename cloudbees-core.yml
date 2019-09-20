@@ -286,7 +286,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "false"
-    nginx.ingress.kubernetes.io/app-root: "https://$best_http_host/cjoc"
+    nginx.ingress.kubernetes.io/app-root: "/cjoc"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     # "413 Request Entity Too Large" uploading plugins, increase client_max_body_size
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
