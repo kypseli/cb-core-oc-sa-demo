@@ -243,7 +243,7 @@ metadata:
   namespace: core-demo
   
 ---
-kind: GlobalRole
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cbot
