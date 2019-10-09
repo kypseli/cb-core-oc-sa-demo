@@ -234,7 +234,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: cjoc
-
+  
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: core-bot
+  namespace: core-demo
+  
 ---
 # Source: cloudbees-core/templates/rolebinding-master.yaml
 
@@ -254,6 +261,8 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: jenkins
+- kind: ServiceAccount
+  name: core-bot
 ---
 # Source: cloudbees-core/templates/cjoc-svc.yaml
 apiVersion: v1
