@@ -297,6 +297,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: core-bot
+  namespace: core-demo
 ---
 # Source: cloudbees-core/templates/rolebinding-master.yaml
 
