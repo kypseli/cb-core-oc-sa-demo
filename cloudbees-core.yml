@@ -159,6 +159,11 @@ metadata:
     release: "cloudbees-core"
     chart: "cloudbees-core-3.4.0"
 rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - cb-restricted
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["create","delete","get","list","patch","update","watch"]
@@ -177,6 +182,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cjoc-master-management
 rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - cb-restricted
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["create","delete","get","list","patch","update","watch"]
