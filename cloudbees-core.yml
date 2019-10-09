@@ -370,6 +370,7 @@ spec:
                 -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.disableAutoConfiguration=true
                 -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.serviceAccount=jenkins
                 -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.storageClassName=ssd
+                -Dcom.cloudbees.opscenter.clouds.kubernetes.KubernetesConfiguration.autoconfigure=false
             - name: CASC_JENKINS_CONFIG
               value: https://raw.githubusercontent.com/kypseli/demo-oc-casc/master/jcasc.yml
           ports:
@@ -388,6 +389,9 @@ spec:
             - name: jenkins-home
               mountPath: /var/jenkins_home
               readOnly: false
+            - name: jenkins-configure-jenkins-groovy
+              mountPath: /var/jenkins_config/configure-jenkins.groovy.d
+              readOnly: true
           livenessProbe:
             httpGet:
               path: /cjoc/login
@@ -395,6 +399,10 @@ spec:
             initialDelaySeconds: 300
             timeoutSeconds: 5
             failureThreshold: 12
+      volumes:
+      - name: jenkins-configure-jenkins-groovy
+        configMap:
+          name: cjoc-configure-jenkins-groovy
   volumeClaimTemplates:
     - metadata:
         name: jenkins-home
