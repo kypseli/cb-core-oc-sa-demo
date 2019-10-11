@@ -463,7 +463,6 @@ spec:
             requests:
               cpu: "2"
               memory: "4G"
-
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
