@@ -445,7 +445,11 @@ spec:
                 -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.disableAutoConfiguration=true
                 -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.serviceAccount=jenkins
                 -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.storageClassName=ssd
-                -Dcom.cloudbees.opscenter.clouds.kubernetes.KubernetesConfiguration.autoconfigure=false
+                -Dcom.cloudbees.opscenter.clouds.kubernetes.KubernetesConfiguration.autoconfigure=false:
+            # With the help of SECRETS environment variable
+            # we point Jenkins Configuration as Code plugin the location of the secrets
+            - name: SECRETS
+              value: /var/jenkins_home/oc-jcasc-secrets
             - name: CASC_JENKINS_CONFIG
               value: https://raw.githubusercontent.com/kypseli/demo-oc-casc/master/jcasc.yml
           ports:
@@ -467,6 +471,9 @@ spec:
             - name: jenkins-configure-jenkins-groovy
               mountPath: /var/jenkins_config/configure-jenkins.groovy.d
               readOnly: true
+            - name: oc-jcasc-secrets
+              mountPath: /var/jenkins_home/oc-jcasc-secrets
+              readOnly: true
           livenessProbe:
             httpGet:
               path: /cjoc/login
@@ -477,7 +484,10 @@ spec:
       volumes:
       - name: jenkins-configure-jenkins-groovy
         configMap:
-          name: cjoc-configure-jenkins-groovy
+          name: cjoc-configure-jenkins-groovy:
+      - name: oc-jcasc-secrets
+        secret:
+          secretName: oc-jcasc-secrets
   volumeClaimTemplates:
     - metadata:
         name: jenkins-home
