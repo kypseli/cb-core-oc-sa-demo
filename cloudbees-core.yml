@@ -403,7 +403,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jenkins
-          image: gcr.io/technologists/cb-core-oc-workshop:2176.3.49
+          image: gcr.io/technologists/cb-core-oc-workshop:2176.3.50
           imagePullPolicy: "Always"
           env:
             - name: ENVIRONMENT
