@@ -434,8 +434,6 @@ spec:
             # we point Jenkins Configuration as Code plugin the location of the secrets
             - name: SECRETS
               value: /var/jenkins_home/oc-jcasc-secrets
-            - name: CASC_JENKINS_CONFIG
-              value: https://raw.githubusercontent.com/kypseli/demo-oc-casc/master/jcasc.yml
           ports:
             - containerPort: 8080
               name: http
