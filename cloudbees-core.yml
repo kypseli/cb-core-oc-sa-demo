@@ -418,7 +418,9 @@ spec:
                 -XX:MaxRAMFraction=1
                 -XX:+UnlockExperimentalVMOptions
                 -XX:+UseCGroupMemoryLimitForHeap
+                -Djenkins.install.runSetupWizard=false
                 -Dcb.IMProp.warProfiles.cje=kubernetes.json
+                -Dcom.cloudbees.jenkins.cjp.installmanager.CJPPluginManager.suggestedRequired=true
                 -Dcom.cloudbees.opscenter.analytics.reporter.JocAnalyticsReporter.PERIOD=120
                 -Dcom.cloudbees.opscenter.analytics.reporter.metrics.AperiodicMetricSubmitter.PERIOD=120
                 -Dcom.cloudbees.opscenter.analytics.FeederConfiguration.PERIOD=120
