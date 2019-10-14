@@ -1,3 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ssd
+provisioner: kubernetes.io/gce-pd
+allowVolumeExpansion: true
+# Uncomment the following for multi zone clusters
+# volumeBindingMode: WaitForFirstConsumer
+parameters:
+  type: pd-ssd
 ---
 # Source: cloudbees-core/templates/cjoc-configure-jenkins-groovy.yaml
 apiVersion: v1
@@ -196,6 +206,9 @@ rules:
 - apiGroups: [""]
   resources: ["events"]
   verbs: ["get","list","watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get","list"]
 
 ---
 # Source: cloudbees-core/templates/rolebinding-cjoc.yaml
