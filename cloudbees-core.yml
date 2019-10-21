@@ -165,6 +165,15 @@ rules:
 - apiGroups: [""]
   resources: ["pods/log"]
   verbs: ["get","list","watch"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
 
 ---
 # Source: cloudbees-core/templates/role-master-management.yaml
