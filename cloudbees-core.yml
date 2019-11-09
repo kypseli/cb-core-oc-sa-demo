@@ -449,7 +449,7 @@ spec:
                 -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.disableAutoConfiguration=true
                 -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.serviceAccount=jenkins
                 -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.storageClassName=ssd
-                -Dcom.cloudbees.opscenter.clouds.kubernetes.KubernetesConfiguration.autoconfigure=false:
+                -Dcom.cloudbees.opscenter.clouds.kubernetes.KubernetesConfiguration.autoconfigure=false
             # With the help of SECRETS environment variable
             # we point Jenkins Configuration as Code plugin the location of the secrets
             - name: SECRETS
