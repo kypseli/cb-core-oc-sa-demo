@@ -1,7 +1,4 @@
 namespace: core
-images:
-- name: cloudbees/cloudbees-cloud-core-oc
-  newTag: 2.190.2.2
 resources:
 - cb-core-namespace.yml
 - ssd-storageclass.yml

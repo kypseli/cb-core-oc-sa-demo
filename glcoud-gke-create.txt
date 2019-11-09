@@ -41,3 +41,6 @@ kubectl -n core describe certificate cb-core-tls
 
 # get intial admin password for OC
 kubectl -n core exec cjoc-0 -- cat /var/jenkins_home/secrets/initialAdminPassword
+
+# create mm-ops namespace and RBAC config
+kubectl apply -k ./mm-ops

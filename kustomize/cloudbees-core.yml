@@ -343,16 +343,18 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "cloudbees/cloudbees-cloud-core-oc:2.176.4.3"
+        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:b7e8a559c188a165ede9edcec5f43aa363146e1a7b20956bb4c3e5ca36c0a593"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT
           value: KUBERNETES
         - name: JENKINS_OPTS
           value: "--prefix=/cjoc"
+        # With the help of SECRETS environment variable
+        # we point Jenkins Configuration as Code plugin the location of the secrets
+        - name: SECRETS
+          value: /var/jenkins_home/oc-jcasc-secrets
         - name: JAVA_OPTS
-          # To allocate masters using a non-default storage class, add the following
-          # -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.storageClassName=some-storage-class
           value: >-
             -XshowSettings:vm
             -XX:MaxRAMFraction=1
@@ -379,13 +381,15 @@ spec:
           requests:
             cpu: "1"
             memory: "3G"
-
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
           readOnly: false
         - name: jenkins-configure-jenkins-groovy
           mountPath: /var/jenkins_config/configure-jenkins.groovy.d
+          readOnly: true
+        - name: oc-jcasc-secrets
+          mountPath: /var/jenkins_home/oc-jcasc-secrets
           readOnly: true
         livenessProbe:
             httpGet:
@@ -398,6 +402,9 @@ spec:
       - name: jenkins-configure-jenkins-groovy
         configMap:
           name: cjoc-configure-jenkins-groovy
+      - name: oc-jcasc-secrets
+        secret:
+          secretName: oc-jcasc-secrets
   volumeClaimTemplates:
   - metadata:
       name: jenkins-home
