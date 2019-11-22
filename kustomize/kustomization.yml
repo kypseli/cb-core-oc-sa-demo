@@ -1,4 +1,5 @@
 namespace: core
+images:
 - name: gcr.io/preview-demo/cb-core-oc-workshop
   digests: sha256:a3023f5eab1f79108577b2adb00f3015578a2ac2399e80566740917eec912166
 resources:
