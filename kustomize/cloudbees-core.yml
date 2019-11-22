@@ -119,7 +119,7 @@ metadata:
 data:
   location.groovy: |
     hudson.ExtensionList.lookupSingleton(com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor.class).disable(true)
-    jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://preview.cb-sa.io/cjoc")
+    jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://demo.cb-sa.io/cjoc")
 ---
 # Source: cloudbees-core/templates/cjoc-service-account.yaml
 apiVersion: v1
@@ -254,6 +254,66 @@ subjects:
 - kind: ServiceAccount
   name: jenkins
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: core-bot
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cbot
+rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - cb-restricted
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get","list","watch"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["create","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["create","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["create","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["create","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["roles"]
+  verbs: ["create","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["rolebindings"]
+  verbs: ["create","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get","list","watch"]
+---
+# Source: cloudbees-core/templates/rolebinding-master.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cbot-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cbot
+subjects:
+- kind: ServiceAccount
+  name: core-bot
+  namespace: core-demo
+---
 # Source: cloudbees-core/templates/cjoc-svc.yaml
 
 apiVersion: v1
@@ -280,24 +340,32 @@ spec:
   type: ClusterIP
 ---
 # Source: cloudbees-core/templates/cjoc-ingress.yaml
-
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: cjoc
   labels:
     app: cjoc
+    chart: "cloudbees-core-3.4.0"
     release: "cloudbees-core"
+    heritage: "Tiller"
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/app-root: "http://$best_http_host/cjoc/teams-check/"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/tls-acme: "false"
+    nginx.ingress.kubernetes.io/app-root: "/cjoc"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     # "413 Request Entity Too Large" uploading plugins, increase client_max_body_size
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    certmanager.k8s.io/issuer: "letsencrypt-prod"
+    certmanager.k8s.io/acme-challenge-type: http01
 spec:
+  tls:
+  - hosts:
+    - demo.cb-sa.io
+    secretName: cjoc-tls
   rules:
-  - host: "cloudbees-core.example.com"
+  - host: "demo.cb-sa.io"
     http:
       paths:
       - path: /cjoc
@@ -336,6 +404,19 @@ spec:
         release: "cloudbees-core"
         component: "cloudbees-core-jenkins-master"
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: "com.cloudbees.cje.type"
+                  operator: "In"
+                  values:
+                  - "cjoc"
+                matchLabels: {}
+              topologyKey: "kubernetes.io/hostname"
+            weight: 1
       serviceAccountName: cjoc
       securityContext:
         runAsUser: 1000
@@ -343,7 +424,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:b7e8a559c188a165ede9edcec5f43aa363146e1a7b20956bb4c3e5ca36c0a593"
+        image: "gcr.io/core-workshop/cb-core-oc-workshop@sha256:5095052dbaa3767bd07e58003be6a47a7f23e3bc654fc1463b3c457c855c4ea3"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT
@@ -376,11 +457,11 @@ spec:
         - containerPort: 50000
         resources:
           limits:
-            cpu: "1"
-            memory: "3G"
+            cpu: "3"
+            memory: "8G"
           requests:
-            cpu: "1"
-            memory: "3G"
+            cpu: "2.5"
+            memory: "4G"
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
@@ -412,6 +493,7 @@ spec:
         app: cjoc
         release: "cloudbees-core"
     spec:
+      storageClassName: ssd
       accessModes:
         - "ReadWriteOnce"
       resources:

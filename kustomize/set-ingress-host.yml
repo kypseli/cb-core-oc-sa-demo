@@ -13,10 +13,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - preview.cb-sa.io
+    - demo.cb-sa.io
     secretName: cb-core-tls
   rules:
-  - host: "preview.cb-sa.io"
+  - host: "demo.cb-sa.io"
     http:
       paths:
       - path: /cjoc

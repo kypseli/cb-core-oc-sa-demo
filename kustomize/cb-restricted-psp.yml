@@ -3,8 +3,8 @@ kind: PodSecurityPolicy
 metadata:
   name: cb-restricted
   annotations:
-    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
-    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'unconfined,runtime/default'
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'unconfined,runtime/default'
     seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
     apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
 spec:
@@ -33,7 +33,7 @@ spec:
   hostPID: false
   hostIPC: false
   hostNetwork: false
-  allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: true
 ---
 # restricted psp to be use accross cluster.
 apiVersion: rbac.authorization.k8s.io/v1
