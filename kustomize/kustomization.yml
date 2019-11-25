@@ -1,7 +1,11 @@
-namespace: core-demo
+namespace: core
 resources:
 - cb-core-namespace.yml
 - ssd-storageclass.yml
 - cloudbees-core.yml
 - managed-master-hibernation-monitor.yml
 - cb-restricted-psp.yml
+- letsencrypt-production-issuer.yml
+patchesStrategicMerge:
+- set-ingress-host.yml
+- set-storageclass.yml

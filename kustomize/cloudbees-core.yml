@@ -119,7 +119,7 @@ metadata:
 data:
   location.groovy: |
     hudson.ExtensionList.lookupSingleton(com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor.class).disable(true)
-    jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://demo.cb-sa.io/cjoc")
+    jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://preview.cb-sa.io/cjoc")
 ---
 # Source: cloudbees-core/templates/cjoc-service-account.yaml
 apiVersion: v1
@@ -424,7 +424,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "gcr.io/core-workshop/cb-core-oc-workshop@sha256:5095052dbaa3767bd07e58003be6a47a7f23e3bc654fc1463b3c457c855c4ea3"
+        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:18413edcaeb2f75e287550f922680adcfce43c7383f491a14a5363fb61846e4a"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT
@@ -435,6 +435,8 @@ spec:
         # we point Jenkins Configuration as Code plugin the location of the secrets
         - name: SECRETS
           value: /var/jenkins_home/oc-jcasc-secrets
+        - name: CASC_JENKINS_CONFIG
+          value: https://raw.githubusercontent.com/kypseli/demo-oc-casc/preview/jcasc.yml
         - name: JAVA_OPTS
           value: >-
             -XshowSettings:vm
