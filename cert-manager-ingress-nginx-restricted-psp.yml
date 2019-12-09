@@ -27,6 +27,7 @@ metadata:
     seccomp.security.alpha.kubernetes.io/defaultProfileName:  'docker/default'
   name: ingress-nginx
 spec:
+  allowPrivilegeEscalation: false
   fsGroup:
     rule: 'MustRunAs'
     ranges:
