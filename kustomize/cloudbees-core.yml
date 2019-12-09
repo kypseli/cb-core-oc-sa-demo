@@ -198,7 +198,7 @@ rules:
   verbs: ["create","delete","get","list","patch","update","watch"]
 - apiGroups: [""]
   resources: ["secrets"]
-  verbs: ["list"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
 - apiGroups: [""]
   resources: ["events"]
   verbs: ["get","list","watch"]
