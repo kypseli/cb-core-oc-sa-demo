@@ -471,7 +471,7 @@ spec:
         - name: jenkins-configure-jenkins-groovy
           mountPath: /var/jenkins_config/configure-jenkins.groovy.d
           readOnly: true
-        - name: oc-jcasc-secrets
+        - name: oc-casc-secrets
           mountPath: /var/jenkins_home/oc-jcasc-secrets
           readOnly: true
         livenessProbe:

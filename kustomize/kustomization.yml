@@ -1,6 +1,5 @@
 namespace: core
 resources:
-- sealed-secrets/controller.yaml
 - cb-core-namespace.yml
 - ssd-storageclass.yml
 - cloudbees-core.yml
