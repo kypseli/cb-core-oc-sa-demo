@@ -99,7 +99,7 @@ spec:
                   - linux
       containers:
       - name: managed-master-hibernation-monitor
-        image: cloudbees/managed-master-hibernation-monitor:201.ad3b50f73a59
+        image: cloudbees/managed-master-hibernation-monitor:207.59ac576f66d8
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8090

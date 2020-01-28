@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: letsencrypt-staging
-  namespace: core
+  namespace: cje
 spec:
   acme:
     # You must replace this email address with your own.

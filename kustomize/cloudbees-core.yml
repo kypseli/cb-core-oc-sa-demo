@@ -198,7 +198,7 @@ rules:
   verbs: ["create","delete","get","list","patch","update","watch"]
 - apiGroups: [""]
   resources: ["secrets"]
-  verbs: ["list"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
 - apiGroups: [""]
   resources: ["events"]
   verbs: ["get","list","watch"]
@@ -221,6 +221,15 @@ rules:
 - apiGroups: [""]
   resources: ["pods/log"]
   verbs: ["get","list","watch"]
+- apiGroups: ["extensions"]
+  resources: ["deployments"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
 ---
 # Source: cloudbees-core/templates/cjoc-rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -343,7 +352,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:b7e8a559c188a165ede9edcec5f43aa363146e1a7b20956bb4c3e5ca36c0a593"
+        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:8a7b5be18cbe884a0624c056bab763b29c8762e32d425e6d3170898a8101d64c"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT

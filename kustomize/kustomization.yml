@@ -1,4 +1,4 @@
-namespace: core
+namespace: core-demo
 resources:
 - cb-core-namespace.yml
 - ssd-storageclass.yml
