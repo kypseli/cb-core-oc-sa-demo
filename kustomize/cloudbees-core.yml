@@ -119,7 +119,7 @@ metadata:
 data:
   location.groovy: |
     hudson.ExtensionList.lookupSingleton(com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor.class).disable(true)
-    jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://preview.cb-sa.io/cjoc")
+    jenkins.model.JenkinsLocationConfiguration.get().setUrl("https://demo.cb-sa.io/cjoc")
 ---
 # Source: cloudbees-core/templates/cjoc-service-account.yaml
 apiVersion: v1
@@ -352,7 +352,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "gcr.io/cb-sa-demo/cb-core-oc-workshop@sha256:ef5d805f02ecf56f154515d8d18fb805ac7672ec92f0cbb2e32abd9cd895dace"
+        image: "gcr.io/cb-sa-demo/cb-core-oc-workshop@sha256:4d706c9b478f65f8f0441cadb73bb9e8b916d365cb7bee6b15cc8ded8e09c602"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT
