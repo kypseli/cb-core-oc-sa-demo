@@ -4,7 +4,7 @@ metadata:
   name: cjoc
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/issuer: "letsencrypt-production"
+    cert-manager.io/issuer: "letsencrypt-cb-sa-demo-production"
     nginx.ingress.kubernetes.io/app-root: "https://$best_http_host/cjoc/teams-check/"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     # "413 Request Entity Too Large" uploading plugins, increase client_max_body_size
@@ -13,10 +13,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - preview.cb-sa.io
+    - demo.cb-sa.io
     secretName: cb-core-tls
   rules:
-  - host: "preview.cb-sa.io"
+  - host: "demo.cb-sa.io"
     http:
       paths:
       - path: /cjoc

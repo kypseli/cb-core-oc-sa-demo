@@ -1,19 +1,16 @@
 # create GKE cluster
-gcloud beta container --project "preview-demo" clusters create "preview-demo-cluster" \
-  --zone "us-central1-a" --no-enable-basic-auth --cluster-version "1.14.8-gke.2" \
-  --machine-type "n1-standard-2" --image-type "COS" --disk-type "pd-ssd" \
-  --disk-size "50" --node-labels workload=general --metadata disable-legacy-endpoints=true \
-  --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write",\
-  "https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol",\
-  "https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" \
-  --num-nodes "1" --enable-stackdriver-kubernetes --enable-ip-alias --network "projects/preview-demo/global/networks/default" \
-  --subnetwork "projects/preview-demo/regions/us-central1/subnetworks/default" --default-max-pods-per-node "110" \
-  --enable-autoscaling --min-nodes "0" --max-nodes "5" --addons HorizontalPodAutoscaling,HttpLoadBalancing \
+gcloud beta container --project "cb-sa-demo" clusters create "cb-sa-demo-cluster" \
+  --zone "us-central1-a" --no-enable-basic-auth --cluster-version "1.14.8-gke.33" \
+  --machine-type "n1-standard-4" --image-type "COS" --disk-type "pd-ssd" \
+  --disk-size "50" --node-labels workload=general,type=master --metadata disable-legacy-endpoints=true \
+  --num-nodes "2" --enable-stackdriver-kubernetes --enable-ip-alias --network "projects/cb-sa-demo/global/networks/default" \
+  --subnetwork "projects/cb-sa-demo/regions/us-central1/subnetworks/default" --default-max-pods-per-node "50" \
+  --enable-autoscaling --min-nodes "2" --max-nodes "10" --addons HorizontalPodAutoscaling,HttpLoadBalancing \
   --no-enable-autoupgrade --enable-autorepair --maintenance-window-start "2019-11-06T05:00:00Z" \
   --maintenance-window-end "2019-11-06T09:00:00Z" --maintenance-window-recurrence "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU" \
-  --identity-namespace "preview-demo.svc.id.goog"
+  --identity-namespace "cb-sa-demo.svc.id.goog"
 
-# enable Pod Security Policies
+# SKIP - enable Pod Security Policies - Skipping for now
 gcloud beta container clusters update  preview-demo-cluster \
   --enable-pod-security-policy --zone us-central1-a --project preview-demo
 
@@ -23,7 +20,7 @@ kubectl apply -f ./nginx-ingress
 # install cert-manager
 kubectl apply --validate=false -f ./cert-manager
 
-# add PSPs for ingress-nginx and cert-manager
+# SKIP - add PSPs for ingress-nginx and cert-manager
 kubectl apply -f cert-manager-ingress-nginx-restricted-psp.yml
 
 # get external ip for ingress-nginx and add DNS A recore
@@ -34,13 +31,20 @@ kubectl -n ingress-nginx get svc ingress-nginx \
 kubectl apply -k ./kustomize
 
 # check cert-manager issuer
-kubectl -n core describe issuer letsencrypt-production
+kubectl -n core-demo describe issuer letsencrypt-cb-sa-demo-production
 
 # check the cert
-kubectl -n core describe certificate cb-core-tls
-
-# get intial admin password for OC
-kubectl -n core exec cjoc-0 -- cat /var/jenkins_home/secrets/initialAdminPassword
+kubectl -n core-demo describe certificate cb-core-tls
 
 # create mm-ops namespace and RBAC config
 kubectl apply -k ./mm-ops
+
+# get intial admin password for OC
+kubectl -n core-demo exec cjoc-0 -- cat /var/jenkins_home/secrets/initialAdminPassword
+
+# get license
+# install suggested plugins
+
+
+
+

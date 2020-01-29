@@ -352,7 +352,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:8a7b5be18cbe884a0624c056bab763b29c8762e32d425e6d3170898a8101d64c"
+        image: "gcr.io/cb-sa-demo/cb-core-oc-workshop@sha256:ef5d805f02ecf56f154515d8d18fb805ac7672ec92f0cbb2e32abd9cd895dace"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT
@@ -385,11 +385,11 @@ spec:
         - containerPort: 50000
         resources:
           limits:
-            cpu: "1"
-            memory: "3G"
+            cpu: "2"
+            memory: "4G"
           requests:
-            cpu: "1"
-            memory: "3G"
+            cpu: "2"
+            memory: "4G"
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home

@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: core-bot
+  namespace: core-demo
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: core-bot
+rules:
+- apiGroups: [""]
+  resources: ["pods","configmaps","services","serviceaccounts"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["extensions","policy"]
+  resources: ["podsecuritypolicies"]
+  verbs: ["use","create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get","list","watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets/scale"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles","rolebindings"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get","list","watch"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["list"]
+- apiGroups: ["apps","extensions"]
+  resources: ["deployments"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: core-bot
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: core-bot
+subjects:
+- kind: ServiceAccount
+  name: core-bot
+  namespace: core-demo

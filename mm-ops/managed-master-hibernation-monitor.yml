@@ -17,11 +17,6 @@ metadata:
     app.kubernetes.io/instance: "release-name"
     app.kubernetes.io/name: "cloudbees-core"
 rules:
-- apiGroups: ['extensions']
-  resources: ['podsecuritypolicies']
-  verbs:     ['use']
-  resourceNames:
-  - cb-restricted
 - apiGroups:
   - apps
   resources:

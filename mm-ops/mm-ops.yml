@@ -6,6 +6,51 @@ metadata:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: jenkins
+  namespace: mm-ops
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cjoc-agents
+  namespace: mm-ops
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get","list","watch"]
+- apiGroups: ["extensions"]
+  resources: ["deployments"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+---
+# Source: cloudbees-core/templates/master-rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cjoc-master-role-binding
+  namespace: mm-ops
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cjoc-agents
+subjects:
+- kind: ServiceAccount
+  name: jenkins
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: mm-ops
 automountServiceAccountToken: false
 ---
@@ -14,11 +59,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cjoc-agents
 rules:
-- apiGroups: ['extensions']
-  resources: ['podsecuritypolicies']
-  verbs:     ['use']
-  resourceNames:
-  - cb-restricted
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["create","delete","get","list","patch","update","watch"]
@@ -46,11 +86,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cjoc-master-management
 rules:
-- apiGroups: ['extensions']
-  resources: ['podsecuritypolicies']
-  verbs:     ['use']
-  resourceNames:
-  - cb-restricted
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["create","delete","get","list","patch","update","watch"]
@@ -61,6 +96,9 @@ rules:
   resources: ["pods/log"]
   verbs: ["get","list","watch"]
 - apiGroups: ["apps"]
+  resources: ["statefulsets","deployments"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["extensions"]
   resources: ["statefulsets","deployments"]
   verbs: ["create","delete","get","list","patch","update","watch"]
 - apiGroups: [""]
@@ -93,4 +131,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: cjoc
-  namespace: core
+  namespace: core-demo
