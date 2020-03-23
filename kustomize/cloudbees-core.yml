@@ -424,7 +424,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jenkins
-        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:18413edcaeb2f75e287550f922680adcfce43c7383f491a14a5363fb61846e4a"
+        image: "gcr.io/preview-demo/cb-core-oc-workshop@sha256:d055a635a1fe77e64b9657356d7dc35763f0108ad2f4831a77e3ea876a0ca48a"
         imagePullPolicy: "Always"
         env:
         - name: ENVIRONMENT
@@ -471,7 +471,7 @@ spec:
         - name: jenkins-configure-jenkins-groovy
           mountPath: /var/jenkins_config/configure-jenkins.groovy.d
           readOnly: true
-        - name: oc-casc-secrets
+        - name: oc-jcasc-secrets
           mountPath: /var/jenkins_home/oc-jcasc-secrets
           readOnly: true
         livenessProbe:
